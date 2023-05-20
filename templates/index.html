@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="indexBody">
+<head>
+    <link rel="stylesheet" href="/static/styless.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex's Project</title>
+</head>
+<body>
+        <div class="mainDivIndex">
+            <h1>Door Control</h1>
+            
+            <div class="formsDivIndex">
+                {% if session['email'] %}
+                <h3>Welcome, {{ session['email'] }}!</h3>
+                <form action="{{ url_for('logout') }}">
+                    <button class="buttonBlue" type="submit">Logout</button>
+                </form>
+                    {% if session['_isAdmin'] == 1 %}
+                <form action="/admin">
+                    <button class="buttonBlue" type="submit">Admin Panel</button>
+                </form>
+                <form action="/allusers">
+                    <button class="buttonBlue" type="submit">Press to see all users</button>
+                </form>
+                    {% endif %}
+                <form action="/profile">
+                    <button class="buttonBlue" type="submit">Profile</button>
+                </form>
+                {% else %}
+                <h3>Hello, please login first</h3>
+                <form action="/signup">
+                    <button class="buttonBlue" type="submit">SIGN UP</button>
+                </form>
+                <form action="/login">
+                    <button class="buttonBlue" type="submit">SIGN IN</button>
+                </form>
+            </div>
+                {% endif %}
+            <div>
+                <h2>API page</h2>
+                <a href="api" > API link</a>
+            </div>
+            
+        </div>
+</body>
+</html>
