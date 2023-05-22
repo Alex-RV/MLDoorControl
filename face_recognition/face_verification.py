@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os 
+import time
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('trainer/trainer.yml')
@@ -23,14 +24,6 @@ cam.set(4, 480) # set video height
 # Define min window size to be recognized as a face
 minW = 0.1*cam.get(3)
 minH = 0.1*cam.get(4)
-
-# Do a bit of cleanup
-print("\n [INFO] Exiting Program and cleanup stuff")
-cam.release()
-cv2.destroyAllWindows()
-
-
-import time
 
 def face_verification():
     start_time = time.time()
@@ -71,6 +64,9 @@ def face_verification():
             
             elapsed_time = time.time() - start_time
             if elapsed_time >= 3:
+                print("Verified")
+                cam.release()
+                cv2.destroyAllWindows()
                 return True  
                 
         cv2.imshow('camera', img)
@@ -78,6 +74,7 @@ def face_verification():
         k = cv2.waitKey(10) & 0xff  
         if k == 27:
             break
-    
+    print("NOT verified")
+    cam.release()
+    cv2.destroyAllWindows()
     return False
-

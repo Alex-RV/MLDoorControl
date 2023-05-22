@@ -5,6 +5,7 @@ import requests
 from flask import Flask, render_template, request, session, redirect, url_for, flash
 # from gpiozero import Servo
 from time import sleep
+from face_recognition.face_verification import face_verification
 
 
 app = Flask(__name__)
@@ -57,39 +58,45 @@ def get_all_users():
 
 def changeDoorState(doorId, value):
     print("changeDoorState", doorId, value)
-    conn = sqlite3.connect('./static/myapp.db')
-    curs = conn.cursor()
-    curs.execute(f"UPDATE doors SET isOpen = ? WHERE name = ?", (value, doorId))
-    # HERE HARDWARE CODE
-    if doorId == 'door1':
-        # servo = Servo(4)
-        if value == 1:
-            # servo.max()
-            sleep(1)
-            print("Door1 opened")
-        elif value == 0:
-            # servo.min()
-            sleep(1)
-            print("Door1 closed")
-    elif doorId == 'door2':
-        # servo = Servo(2)
-        if value == 1:
-            # servo.max()
-            sleep(1)
-            print("Door2 opened")
-        elif value == 0:
-            # servo.min()
-            sleep(1)
-            print("Door2 closed")
-    else:
-        return("Error")
+    if face_verification():
+        conn = sqlite3.connect('./static/myapp.db')
+        curs = conn.cursor()
+        curs.execute(f"UPDATE doors SET isOpen = ? WHERE name = ?", (value, doorId))
+        # HERE HARDWARE CODE
+        if doorId == 'door1':
+            # servo = Servo(4)
+            if value == 1:
+                # servo.max()
+                sleep(1)
+                print("Door1 opened")
+            elif value == 0:
+                # servo.min()
+                sleep(1)
+                print("Door1 closed")
+        elif doorId == 'door2':
+            # servo = Servo(2)
+            if value == 1:
+                # servo.max()
+                sleep(1)
+                print("Door2 opened")
+            elif value == 0:
+                # servo.min()
+                sleep(1)
+                print("Door2 closed")
+        else:
+            return("Error")
+        
+        # servo.close()
+
+        conn.commit()
+        conn.close()
+
+        return (f'DOOR : {doorId} STATE : {value} changed successfully!')
     
-    # servo.close()
+    else:
+        return (f'DOOR : {doorId} STATE : {value} NOT changed because person unverified!')
 
-    conn.commit()
-    conn.close()
-
-    return (f'DOOR : {doorId} STATE : {value} changed successfully!')
+    
 
 
 
