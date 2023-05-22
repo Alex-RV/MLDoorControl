@@ -2,14 +2,17 @@
 
 # Function to download a file from Google Drive
 download_file() {
+    file_id = "1TzeHoICU_37L1LnN_gYi9jR2KbnljT2l"
+    destination = "/trainer"
+
     file_id="$1"  # Google Drive file ID
     destination="$2"  # Destination path to save the downloaded file
 
     # Construct the download URL
-    url="https://drive.google.com/file/d/1TzeHoICU_37L1LnN_gYi9jR2KbnljT2l/view?usp=sharing"
+    url="https://docs.google.com/uc?export=download&id=${file_id}"
 
     # Use curl to download the file
-    curl -L -o "/trainer" "${url}"
+    curl -L -o "${destination}" "${url}"
 }
 
 # Example usage: download_file "<file_id>" "<destination_path>"
